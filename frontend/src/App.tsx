@@ -23,13 +23,13 @@ function Gate() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#08090C]">
-        <span className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
+      <div className="flex h-screen items-center justify-center bg-[#0a0a0a]">
+        <span className="h-8 w-8 animate-spin rounded-full border-2 border-[#00d4aa] border-t-transparent" />
       </div>
     );
   }
 
-  // Always allow unauthenticated visitors to view /landing or / (if not logged in)
+  // Unauthenticated routing
   if (!isAuthenticated) {
     if (location.pathname === '/auth' || location.pathname === '/login') {
       return <AuthPage />;
@@ -47,12 +47,12 @@ function Gate() {
 
   return (
     <Routes>
-      {/* Landing page accessible for logged in users as well */}
+      {/* Landing page is default for route / for everyone */}
+      <Route path="/" element={<LandingPage />} />
       <Route path="/landing" element={<LandingPage />} />
 
       {/* Main App Routes wrapped in Charter-styled AppShell */}
       <Route element={<AppShell />}>
-        <Route path="/" element={<DashboardPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/accounts" element={<AccountsPage />} />
         <Route path="/accounts/transfer" element={<TransferPage />} />

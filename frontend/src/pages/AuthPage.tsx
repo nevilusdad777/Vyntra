@@ -98,9 +98,8 @@ export function AuthPage() {
 
   if (mode === 'forgot') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
-        <div className="fixed top-[-10%] left-[-10%] w-[45%] h-[45%] rounded-full bg-primary-container/10 blur-[130px] pointer-events-none"></div>
-        <div className="fixed bottom-[-10%] right-[-10%] w-[45%] h-[45%] rounded-full bg-tertiary-container/10 blur-[130px] pointer-events-none"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-4 relative overflow-hidden">
+        <div className="fixed top-0 left-0 right-0 h-[400px] pointer-events-none z-0" style={{ background: 'radial-gradient(ellipse 60% 35% at 50% 0%, rgba(0,212,170,0.035), transparent)' }} />
         <div className="relative z-10 w-full max-w-md">
           <ForgotPasswordPage onBack={() => setMode('login')} />
         </div>
@@ -109,28 +108,30 @@ export function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden antialiased">
-      {/* Ambient Light Orbs */}
-      <div className="fixed top-[-10%] left-[-10%] w-[45%] h-[45%] rounded-full bg-primary-container/15 blur-[130px] pointer-events-none"></div>
-      <div className="fixed bottom-[-10%] right-[-10%] w-[45%] h-[45%] rounded-full bg-tertiary-container/15 blur-[130px] pointer-events-none"></div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0a0a] text-white p-4 relative overflow-hidden font-sans antialiased">
+      {/* Background Dot Grid */}
+      <div
+        className="fixed inset-0 pointer-events-none z-0"
+        style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0)', backgroundSize: '28px 28px' }}
+      />
+      {/* Ambient Radial Light */}
+      <div className="fixed top-0 left-0 right-0 h-[500px] pointer-events-none z-0" style={{ background: 'radial-gradient(ellipse 60% 35% at 50% 0%, rgba(0,212,170,0.04), transparent)' }} />
 
-      <main className="w-full max-w-md relative z-10">
-        <div className="glass-panel rounded-[32px] p-8 md:p-10 flex flex-col gap-6 relative overflow-hidden border border-white/10 shadow-[0_0_40px_rgba(196,192,255,0.05)]">
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-[40px] pointer-events-none"></div>
-          
+      <main className="w-full max-w-md relative z-10 my-auto">
+        <div className="bg-[#0d0d0d] rounded-3xl p-8 md:p-10 flex flex-col gap-6 relative border border-[#181818] shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
           {/* Header & Navigation */}
           <div className="flex flex-col items-center">
             <Logo variant="auth" />
             
-            <h2 className="text-xl font-bold text-white mt-[40px] text-center leading-tight">
-              {isLogin ? 'Welcome back' : 'Create your account'}
+            <h2 className="text-2xl font-light text-white mt-8 text-center tracking-[-0.02em]">
+              {isLogin ? 'Welcome back.' : 'Create account.'}
             </h2>
-            <p className="text-sm text-on-surface-variant font-medium mt-[12px] text-center">
-              {isLogin ? 'Sign in to manage your financial ecosystem.' : 'Get started with your premium account.'}
+            <p className="text-[13px] text-[#555555] font-normal mt-2 text-center">
+              {isLogin ? 'Sign in to access your private finance workspace.' : 'Get started with local-first encrypted tracking.'}
             </p>
             
-            {/* Tab switcher */}
-            <div className="flex gap-1 bg-surface-container rounded-full p-1 border border-white/5 w-full mt-[32px]">
+            {/* Tab Switcher */}
+            <div className="flex gap-1 bg-[#121212] rounded-full p-1 border border-[#1c1c1c] w-full mt-7">
               {(['login', 'register'] as const).map((m) => (
                 <button
                   key={m}
@@ -138,8 +139,8 @@ export function AuthPage() {
                   onClick={() => { setMode(m); setError(''); }}
                   className={`flex-1 py-2 rounded-full text-xs font-semibold transition-all duration-200 ${
                     mode === m
-                      ? 'bg-primary text-on-primary shadow-[0_0_12px_rgba(196,192,255,0.4)]'
-                      : 'text-on-surface-variant hover:text-white'
+                      ? 'bg-white text-black shadow-md'
+                      : 'text-[#555] hover:text-white'
                   }`}
                 >
                   {m === 'login' ? 'Sign in' : 'Create account'}
@@ -150,8 +151,8 @@ export function AuthPage() {
 
           {/* Error */}
           {error && (
-            <div className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-400">
-              <FiAlertCircle size={15} className="mt-0.5 flex-shrink-0" />
+            <div className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-xs text-red-400">
+              <FiAlertCircle size={14} className="mt-0.5 flex-shrink-0" />
               <span>{error}</span>
             </div>
           )}
@@ -160,10 +161,10 @@ export function AuthPage() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
             {/* Name (register only) */}
             {!isLogin && (
-              <div className="space-y-1">
-                <label htmlFor="auth-name" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block ml-2">Full name</label>
+              <div className="space-y-1.5">
+                <label htmlFor="auth-name" className="text-[10px] font-semibold text-[#555] uppercase tracking-wider block ml-2">Full name</label>
                 <div className="relative">
-                  <FiUser size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" />
+                  <FiUser size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#444]" />
                   <input
                     id="auth-name"
                     type="text"
@@ -171,17 +172,17 @@ export function AuthPage() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Nevil Patel"
                     autoComplete="name"
-                    className="glass-input w-full rounded-full py-3.5 pl-12 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 focus:border-tertiary transition-all"
+                    className="w-full rounded-full bg-[#121212] border border-[#202020] py-3 pl-11 pr-4 text-xs text-white placeholder:text-[#444] focus:outline-none focus:border-[#00d4aa] transition-all"
                   />
                 </div>
               </div>
             )}
 
             {/* Email */}
-            <div className="space-y-1">
-              <label htmlFor="auth-email" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block ml-2">Email address</label>
+            <div className="space-y-1.5">
+              <label htmlFor="auth-email" className="text-[10px] font-semibold text-[#555] uppercase tracking-wider block ml-2">Email address</label>
               <div className="relative">
-                <FiMail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" />
+                <FiMail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#444]" />
                 <input
                   id="auth-email"
                   type="email"
@@ -189,27 +190,27 @@ export function AuthPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
                   autoComplete="email"
-                  className="glass-input w-full rounded-full py-3.5 pl-12 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 focus:border-tertiary transition-all"
+                  className="w-full rounded-full bg-[#121212] border border-[#202020] py-3 pl-11 pr-4 text-xs text-white placeholder:text-[#444] focus:outline-none focus:border-[#00d4aa] transition-all"
                 />
               </div>
             </div>
 
             {/* Password */}
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <div className="flex justify-between items-center ml-2 mr-2">
-                <label htmlFor="auth-password" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block">Password</label>
+                <label htmlFor="auth-password" className="text-[10px] font-semibold text-[#555] uppercase tracking-wider block">Password</label>
                 {isLogin && (
                   <button
                     type="button"
                     onClick={() => { setMode('forgot'); setError(''); }}
-                    className="text-xs text-primary hover:text-white transition-colors"
+                    className="text-[11px] text-[#00d4aa] hover:underline transition-colors"
                   >
-                    Forgot Password?
+                    Forgot?
                   </button>
                 )}
               </div>
               <div className="relative">
-                <FiLock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" />
+                <FiLock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#444]" />
                 <input
                   id="auth-password"
                   type={showPw ? 'text' : 'password'}
@@ -217,24 +218,24 @@ export function AuthPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   autoComplete={isLogin ? 'current-password' : 'new-password'}
-                  className="glass-input w-full rounded-full py-3.5 pl-12 pr-12 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 focus:border-tertiary transition-all"
+                  className="w-full rounded-full bg-[#121212] border border-[#202020] py-3 pl-11 pr-11 text-xs text-white placeholder:text-[#444] focus:outline-none focus:border-[#00d4aa] transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPw(!showPw)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-white"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#444] hover:text-white"
                 >
-                  {showPw ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                  {showPw ? <FiEyeOff size={15} /> : <FiEye size={15} />}
                 </button>
               </div>
             </div>
 
             {/* Confirm Password (register only) */}
             {!isLogin && (
-              <div className="space-y-1">
-                <label htmlFor="auth-confirm" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider block ml-2">Confirm password</label>
+              <div className="space-y-1.5">
+                <label htmlFor="auth-confirm" className="text-[10px] font-semibold text-[#555] uppercase tracking-wider block ml-2">Confirm password</label>
                 <div className="relative">
-                  <FiLock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" />
+                  <FiLock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#444]" />
                   <input
                     id="auth-confirm"
                     type={showPw ? 'text' : 'password'}
@@ -242,7 +243,7 @@ export function AuthPage() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Re-enter password"
                     autoComplete="new-password"
-                    className="glass-input w-full rounded-full py-3.5 pl-12 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0 focus:border-tertiary transition-all"
+                    className="w-full rounded-full bg-[#121212] border border-[#202020] py-3 pl-11 pr-4 text-xs text-white placeholder:text-[#444] focus:outline-none focus:border-[#00d4aa] transition-all"
                   />
                 </div>
               </div>
@@ -252,14 +253,14 @@ export function AuthPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-primary-container hover:bg-primary text-white rounded-full py-3.5 font-semibold text-sm mt-3 flex justify-center items-center gap-2 hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(135,129,255,0.4)] disabled:opacity-60"
+              className="w-full bg-white text-black hover:bg-[#e0e0e0] rounded-full py-3.5 font-semibold text-xs mt-3 flex justify-center items-center gap-2 transition-all active:scale-[0.98] disabled:opacity-60"
             >
               {isLoading ? (
-                <span className="h-5 w-5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                <span className="h-4 w-4 rounded-full border-2 border-black border-t-transparent animate-spin" />
               ) : (
                 <>
                   <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
-                  <FiArrowRight size={16} className="mt-0.5" />
+                  <FiArrowRight size={14} />
                 </>
               )}
             </button>
@@ -271,7 +272,7 @@ export function AuthPage() {
           <GoogleButton />
         </div>
 
-        <p className="text-center text-on-surface-variant text-xs mt-6">
+        <p className="text-center text-[#444] text-[11px] mt-6">
           Your data stays on this device. Private by design.
         </p>
       </main>

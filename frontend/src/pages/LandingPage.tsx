@@ -136,7 +136,7 @@ export function LandingPage() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const handleLaunchApp = () => navigate(isAuthenticated ? '/' : '/auth');
+  const handleLaunchApp = () => navigate(isAuthenticated ? '/dashboard' : '/auth');
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans overflow-x-hidden relative">
