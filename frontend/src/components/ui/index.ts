@@ -4,3 +4,4 @@ export { Input } from './Input';
 export { Badge } from './Badge';
 export { Logo } from './Logo';
 export { ImageCropperModal } from './ImageCropperModal';
+export { CursorPicker } from './CursorPicker';

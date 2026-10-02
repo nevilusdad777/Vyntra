@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FiLogOut, FiShield, FiLock, FiUser, FiCamera } from 'react-icons/fi';
+import { HiSparkles } from 'react-icons/hi2';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -7,7 +8,7 @@ import {
   useChangePassword,
   useUpdateAutoLockSettings,
 } from '@/hooks/queries/useSettings';
-import { ImageCropperModal } from '@/components/ui';
+import { ImageCropperModal, CursorPicker } from '@/components/ui';
 
 const AUTO_LOCK_OPTIONS = [1, 5, 10, 15, 30, 60];
 
@@ -61,7 +62,6 @@ export function SettingsPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Support up to 4MB source images
     if (file.size > 4 * 1024 * 1024) {
       toast.error('Profile picture must be under 4MB');
       return;
@@ -109,7 +109,6 @@ export function SettingsPage() {
     }
   };
 
-  // Dynamic Tier calculations using roles and verification statuses
   const getTierInfo = () => {
     if (!user) {
       return {
@@ -170,16 +169,16 @@ export function SettingsPage() {
   return (
     <div className="space-y-6 pb-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Settings & Profile</h1>
-        <p className="text-sm text-on-surface-variant mt-1">Manage your premium profile and security configurations.</p>
+        <h1 className="text-2xl font-bold text-white">Settings & Customization</h1>
+        <p className="text-sm text-on-surface-variant mt-1">Manage your Charter Labs aesthetic preferences, security, and profile.</p>
       </div>
 
       {/* Profile Header */}
       {user && (
-        <section className="glass-panel rounded-lg p-6 flex flex-col md:flex-row items-center gap-6 text-center md:text-left relative overflow-hidden border border-white/10">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none"></div>
+        <section className="glass-panel rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 text-center md:text-left relative overflow-hidden border border-white/10">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent pointer-events-none" />
           
-          <div className="relative group w-24 h-24 rounded-full overflow-hidden border-2 border-primary shadow-[0_0_20px_rgba(196,192,255,0.3)] bg-primary-container text-2xl font-bold text-white flex items-center justify-center cursor-pointer">
+          <div className="relative group w-24 h-24 rounded-full overflow-hidden border-2 border-indigo-400 shadow-[0_0_20px_rgba(99,102,241,0.3)] bg-indigo-950 text-2xl font-bold text-white flex items-center justify-center cursor-pointer">
             {user.avatarUrl ? (
               <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
             ) : (
@@ -208,7 +207,7 @@ export function SettingsPage() {
           <div className="relative z-10">
             <button
               onClick={() => void logout()}
-              className="bg-primary hover:bg-primary-fixed text-on-primary-container font-semibold text-xs px-5 py-2.5 rounded-full transition-all active:scale-95 shadow-[0_0_15px_rgba(196,192,255,0.4)] flex items-center gap-1.5"
+              className="bg-white/10 hover:bg-white/20 text-white font-semibold text-xs px-5 py-2.5 rounded-full transition-all active:scale-95 border border-white/15 flex items-center gap-1.5"
             >
               <FiLogOut size={12} />
               Logout
@@ -217,13 +216,29 @@ export function SettingsPage() {
         </section>
       )}
 
+      {/* ── Custom Cursor Options Section ── */}
+      <section className="glass-panel rounded-2xl p-6 border border-white/10 space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-cyan-500/10 rounded-xl text-cyan-400 border border-cyan-500/20">
+              <HiSparkles size={18} />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-white">Custom Cursor Theme Options</h2>
+              <p className="text-xs text-on-surface-variant">Select your interactive cursor physics mode across the application.</p>
+            </div>
+          </div>
+        </div>
+        <CursorPicker variant="expanded" />
+      </section>
+
       {/* Bento Grid Settings */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Personal Information Widget */}
-        <section className="glass-panel rounded-lg p-6 flex flex-col hover:border-primary/30 transition-colors border border-white/10">
+        <section className="glass-panel rounded-2xl p-6 flex flex-col hover:border-indigo-500/30 transition-colors border border-white/10">
           <div className="flex items-center justify-between gap-3 mb-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-white/5 rounded-lg text-primary border border-white/5">
+              <div className="p-2 bg-white/5 rounded-lg text-indigo-400 border border-white/5">
                 <FiUser size={16} />
               </div>
               <h2 className="text-base font-bold text-white">Personal Information</h2>
@@ -235,7 +250,7 @@ export function SettingsPage() {
                   setEditEmail(user?.email ?? '');
                   setIsEditingProfile(true);
                 }}
-                className="text-xs font-semibold text-primary hover:text-white transition-colors"
+                className="text-xs font-semibold text-cyan-400 hover:text-white transition-colors"
               >
                 Edit
               </button>
@@ -243,7 +258,7 @@ export function SettingsPage() {
               <button
                 onClick={handleUpdateProfile}
                 disabled={isUpdatingProfile}
-                className="text-xs font-semibold text-primary hover:text-white transition-colors disabled:opacity-50"
+                className="text-xs font-semibold text-cyan-400 hover:text-white transition-colors disabled:opacity-50"
               >
                 Save
               </button>
@@ -258,7 +273,7 @@ export function SettingsPage() {
                     type="text"
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    className="w-full rounded-full border border-border bg-surface px-4 py-2 text-sm text-text-primary focus:outline-none focus:ring-1 focus:ring-primary/50"
+                    className="w-full rounded-full border border-border bg-surface px-4 py-2 text-sm text-text-primary focus:outline-none focus:ring-1 focus:ring-indigo-400/50"
                     placeholder="Full Name"
                     disabled={isUpdatingProfile}
                   />
@@ -273,7 +288,7 @@ export function SettingsPage() {
                     type="email"
                     value={editEmail}
                     onChange={(e) => setEditEmail(e.target.value)}
-                    className="w-full rounded-full border border-border bg-surface px-4 py-2 text-sm text-text-primary focus:outline-none focus:ring-1 focus:ring-primary/50"
+                    className="w-full rounded-full border border-border bg-surface px-4 py-2 text-sm text-text-primary focus:outline-none focus:ring-1 focus:ring-indigo-400/50"
                     placeholder="Email Address"
                     disabled={isUpdatingProfile}
                   />
@@ -305,14 +320,14 @@ export function SettingsPage() {
         </section>
 
         {/* Security & Auto-lock Widget */}
-        <section className="glass-panel rounded-lg p-6 flex flex-col hover:border-primary/30 transition-colors border border-white/10 space-y-6">
+        <section className="glass-panel rounded-2xl p-6 flex flex-col hover:border-indigo-500/30 transition-colors border border-white/10 space-y-6">
           {/* Auto-lock Section */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-white/5 rounded-lg text-primary border border-white/5">
+              <div className="p-2 bg-white/5 rounded-lg text-indigo-400 border border-white/5">
                 <FiShield size={16} />
               </div>
-              <h2 className="text-base font-bold text-white">Auto-Lock System</h2>
+              <h2 className="text-base font-bold text-white">Auto-Lock Security</h2>
             </div>
             <p className="text-xs text-on-surface-variant mb-4">
               Lock the app automatically after inactivity. Current: <span className="text-white font-semibold">{currentAutoLock} minute{currentAutoLock === 1 ? '' : 's'}</span>.
@@ -337,7 +352,7 @@ export function SettingsPage() {
                     }}
                     className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
                       currentAutoLock === minutes
-                        ? 'bg-primary border-primary text-on-primary shadow-[0_0_10px_rgba(196,192,255,0.3)]'
+                        ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_0_10px_rgba(99,102,241,0.4)]'
                         : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
                     }`}
                   >
@@ -352,7 +367,7 @@ export function SettingsPage() {
           <div className="pt-4 border-t border-white/5">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/5 rounded-lg text-primary border border-white/5">
+                <div className="p-2 bg-white/5 rounded-lg text-indigo-400 border border-white/5">
                   <FiLock size={16} />
                 </div>
                 <div>
@@ -362,7 +377,7 @@ export function SettingsPage() {
               </div>
               <button
                 onClick={() => setShowPasswordForm(!showPasswordForm)}
-                className="text-xs font-semibold text-primary hover:text-white transition-colors"
+                className="text-xs font-semibold text-cyan-400 hover:text-white transition-colors"
               >
                 {showPasswordForm ? 'Cancel' : 'Update'}
               </button>
@@ -376,7 +391,7 @@ export function SettingsPage() {
                     type="password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="glass-input w-full rounded-full py-2.5 px-4 text-xs text-on-surface focus:ring-0 focus:border-tertiary transition-all"
+                    className="glass-input w-full rounded-full py-2.5 px-4 text-xs text-on-surface focus:ring-0 focus:border-cyan-400 transition-all"
                     autoComplete="current-password"
                   />
                   {pwErrors.currentPassword && <p className="text-[10px] text-error ml-2">{pwErrors.currentPassword}</p>}
@@ -387,7 +402,7 @@ export function SettingsPage() {
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="glass-input w-full rounded-full py-2.5 px-4 text-xs text-on-surface focus:ring-0 focus:border-tertiary transition-all"
+                    className="glass-input w-full rounded-full py-2.5 px-4 text-xs text-on-surface focus:ring-0 focus:border-cyan-400 transition-all"
                     placeholder="At least 8 characters"
                     autoComplete="new-password"
                   />
@@ -399,7 +414,7 @@ export function SettingsPage() {
                     type="password"
                     value={confirmNewPassword}
                     onChange={(e) => setConfirmNewPassword(e.target.value)}
-                    className="glass-input w-full rounded-full py-2.5 px-4 text-xs text-on-surface focus:ring-0 focus:border-tertiary transition-all"
+                    className="glass-input w-full rounded-full py-2.5 px-4 text-xs text-on-surface focus:ring-0 focus:border-cyan-400 transition-all"
                     autoComplete="new-password"
                   />
                   {pwErrors.confirmNewPassword && <p className="text-[10px] text-error ml-2">{pwErrors.confirmNewPassword}</p>}
@@ -407,7 +422,7 @@ export function SettingsPage() {
                 <button
                   type="submit"
                   disabled={changePasswordMutation.isPending}
-                  className="w-full bg-primary text-on-primary font-semibold text-xs py-3 rounded-full hover:scale-[1.02] active:scale-95 transition-all shadow-[0_0_15px_rgba(196,192,255,0.3)]"
+                  className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs py-3 rounded-full hover:scale-[1.02] active:scale-95 transition-all shadow-[0_0_15px_rgba(99,102,241,0.4)]"
                 >
                   Confirm Password Update
                 </button>

@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { Toaster } from 'react-hot-toast';
+import { CursorProvider } from '@/context/CursorContext';
 import App from './App';
 import './index.css';
 
@@ -46,9 +47,11 @@ createRoot(rootElement).render(
         },
       }}
     >
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <CursorProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </CursorProvider>
       <Toaster
         position="top-right"
         toastOptions={{
