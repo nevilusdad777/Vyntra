@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
-export type CursorMode = 'neon-pulse' | 'cyber-crosshair' | 'magnetic-sphere' | 'emerald-spark' | 'sleek-ring' | 'default';
+export type CursorMode = 'vyntra-single' | 'default';
 
 export interface CursorOption {
   id: CursorMode;
@@ -13,43 +13,15 @@ export interface CursorOption {
 
 export const CURSOR_OPTIONS: CursorOption[] = [
   {
-    id: 'neon-pulse',
-    name: 'Charter Quantum Pulse',
-    tagline: 'Glowing emerald-teal aura ring with dynamic magnetic snap',
+    id: 'vyntra-single',
+    name: 'Charter Glass Lens',
+    tagline: 'Single unified luxury magnetic pointer with fluid hover morphing',
     accentColor: '#00d4aa',
-    badge: 'Recommended',
-  },
-  {
-    id: 'cyber-crosshair',
-    name: 'Quantum Reticle',
-    tagline: 'Precision HUD target lock crosshair with corner brackets',
-    accentColor: '#00f0ff',
-    badge: 'Precision',
-  },
-  {
-    id: 'magnetic-sphere',
-    name: 'Glass Orb',
-    tagline: 'Glassmorphic frosted sphere with liquid spring dynamics',
-    accentColor: '#ffffff',
-    badge: 'Fluid',
-  },
-  {
-    id: 'emerald-spark',
-    name: 'High-Yield Diamond',
-    tagline: 'Emerald diamond reticle with rotating particle aura',
-    accentColor: '#34d399',
-    badge: 'Finance',
-  },
-  {
-    id: 'sleek-ring',
-    name: 'Minimal Invert Ring',
-    tagline: 'Ultra-clean 1px backdrop-invert micro ring',
-    accentColor: '#e2e8f0',
-    badge: 'Minimal',
+    badge: 'Signature',
   },
   {
     id: 'default',
-    name: 'Default Pointer',
+    name: 'Default OS Pointer',
     tagline: 'Standard operating system mouse cursor',
     accentColor: '#64748b',
     badge: 'Classic',
@@ -72,13 +44,13 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
   const [cursorMode, setCursorModeState] = useState<CursorMode>(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY) as CursorMode | null;
-      if (saved && CURSOR_OPTIONS.some((opt) => opt.id === saved)) {
+      if (saved && (saved === 'vyntra-single' || saved === 'default')) {
         return saved;
       }
     } catch {
-      // fallback
+      // safe fallback
     }
-    return 'neon-pulse';
+    return 'vyntra-single';
   });
 
   const [isHovered, setIsHovered] = useState(false);
@@ -87,10 +59,10 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  // High-precision smooth springs for cursor trailing rings
-  const springConfig = { damping: 26, stiffness: 420, mass: 0.4 };
-  const trailX = useSpring(mouseX, springConfig);
-  const trailY = useSpring(mouseY, springConfig);
+  // Ultra-responsive single-point spring physics
+  const springConfig = { damping: 28, stiffness: 450, mass: 0.35 };
+  const smoothX = useSpring(mouseX, springConfig);
+  const smoothY = useSpring(mouseY, springConfig);
 
   const setCursorMode = (mode: CursorMode) => {
     setCursorModeState(mode);
@@ -117,7 +89,7 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
       const target = e.target as HTMLElement | null;
       if (target) {
         const isInteractive = Boolean(
-          target.closest('button, a, input, select, textarea, [role="button"], .interactive, .glass-panel, table tr')
+          target.closest('button, a, input, select, textarea, [role="button"], .interactive, .glass-panel, table tr, label')
         );
         setIsHovered(isInteractive);
       }
@@ -142,12 +114,9 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
     <CursorContext.Provider value={{ cursorMode, setCursorMode, isHovered, isClicked, cursorOptions: CURSOR_OPTIONS }}>
       {children}
       {cursorMode !== 'default' && (
-        <CustomCursorRenderer
-          cursorMode={cursorMode}
-          mouseX={mouseX}
-          mouseY={mouseY}
-          trailX={trailX}
-          trailY={trailY}
+        <SingleCustomCursor
+          smoothX={smoothX}
+          smoothY={smoothY}
           isHovered={isHovered}
           isClicked={isClicked}
         />
@@ -164,188 +133,47 @@ export function useCursor() {
   return context;
 }
 
-// Global Custom Cursor Renderer
-function CustomCursorRenderer({
-  cursorMode,
-  mouseX,
-  mouseY,
-  trailX,
-  trailY,
+// Single Unified Custom Cursor (Zero detached elements)
+function SingleCustomCursor({
+  smoothX,
+  smoothY,
   isHovered,
   isClicked,
 }: {
-  cursorMode: CursorMode;
-  mouseX: any;
-  mouseY: any;
-  trailX: any;
-  trailY: any;
+  smoothX: any;
+  smoothY: any;
   isHovered: boolean;
   isClicked: boolean;
 }) {
   return (
-    <div className="pointer-events-none fixed inset-0 z-[99999] overflow-hidden">
-      {/* ── Mode 1: Charter Quantum Pulse (Recommended) ── */}
-      {cursorMode === 'neon-pulse' && (
-        <>
-          {/* Outer Trailing Glowing Ring */}
-          <motion.div
-            style={{
-              x: trailX,
-              y: trailY,
-              translateX: '-50%',
-              translateY: '-50%',
-            }}
-            animate={{
-              scale: isClicked ? 0.65 : isHovered ? 1.8 : 1,
-              opacity: isHovered ? 1 : 0.75,
-              borderColor: isHovered ? 'rgba(0, 212, 170, 0.95)' : 'rgba(0, 212, 170, 0.5)',
-            }}
-            transition={{ type: 'spring', damping: 22, stiffness: 380 }}
-            className="w-10 h-10 rounded-full border border-[#00d4aa]/70 bg-[#00d4aa]/15 backdrop-blur-[2px] shadow-[0_0_30px_rgba(0,212,170,0.6)] flex items-center justify-center relative"
-          >
-            <div className="w-2.5 h-2.5 rounded-full bg-[#00d4aa] opacity-50 animate-ping" />
-          </motion.div>
-
-          {/* Sharp Neon Arrow Pointer Tip */}
-          <motion.div
-            style={{
-              x: mouseX,
-              y: mouseY,
-            }}
-            animate={{
-              scale: isClicked ? 0.85 : isHovered ? 1.25 : 1,
-              rotate: isHovered ? -15 : 0,
-            }}
-            transition={{ type: 'spring', damping: 20, stiffness: 450 }}
-            className="w-6 h-6 -mt-1 -ml-1 flex items-center justify-center filter drop-shadow-[0_0_8px_#00d4aa]"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M3 3L10.07 19.97L13.58 12.58L20.97 9.07L3 3Z"
-                fill="#00d4aa"
-                stroke="#ffffff"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </motion.div>
-        </>
-      )}
-
-      {/* ── Mode 2: Quantum Reticle (HUD Crosshair) ── */}
-      {cursorMode === 'cyber-crosshair' && (
-        <>
-          <motion.div
-            style={{
-              x: trailX,
-              y: trailY,
-              translateX: '-50%',
-              translateY: '-50%',
-            }}
-            animate={{
-              rotate: isHovered ? 90 : 0,
-              scale: isClicked ? 0.8 : isHovered ? 1.35 : 1,
-            }}
-            transition={{ type: 'spring', stiffness: 320, damping: 22 }}
-            className="w-9 h-9 relative flex items-center justify-center"
-          >
-            {/* Brackets */}
-            <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-[#00f0ff] shadow-[0_0_8px_#00f0ff]" />
-            <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-[#00f0ff] shadow-[0_0_8px_#00f0ff]" />
-            <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-[#00f0ff] shadow-[0_0_8px_#00f0ff]" />
-            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-[#00f0ff] shadow-[0_0_8px_#00f0ff]" />
-          </motion.div>
-
-          <motion.div
-            style={{
-              x: mouseX,
-              y: mouseY,
-              translateX: '-50%',
-              translateY: '-50%',
-            }}
-            className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] shadow-[0_0_10px_#00f0ff]"
-          />
-        </>
-      )}
-
-      {/* ── Mode 3: Glass Orb (Frosted Fluid) ── */}
-      {cursorMode === 'magnetic-sphere' && (
+    <div className="pointer-events-none fixed inset-0 z-[999999] overflow-hidden">
+      <motion.div
+        style={{
+          x: smoothX,
+          y: smoothY,
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+        animate={{
+          width: isClicked ? 16 : isHovered ? 44 : 22,
+          height: isClicked ? 16 : isHovered ? 44 : 22,
+          opacity: isHovered ? 0.95 : 0.85,
+        }}
+        transition={{ type: 'spring', damping: 24, stiffness: 420 }}
+        className={`rounded-full flex items-center justify-center transition-colors duration-200 ${
+          isHovered
+            ? 'bg-[#00d4aa]/15 border-2 border-[#00d4aa] backdrop-blur-[3px] shadow-[0_0_25px_rgba(0,212,170,0.75)]'
+            : 'bg-[#00d4aa]/20 border border-[#00d4aa]/70 shadow-[0_0_16px_rgba(0,212,170,0.5)]'
+        }`}
+      >
+        {/* Core precision dot */}
         <motion.div
-          style={{
-            x: trailX,
-            y: trailY,
-            translateX: '-50%',
-            translateY: '-50%',
-          }}
           animate={{
-            scale: isClicked ? 0.75 : isHovered ? 1.6 : 1,
-            borderColor: isHovered ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.25)',
+            scale: isClicked ? 1.4 : isHovered ? 0.5 : 1,
           }}
-          className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/40 shadow-[0_0_24px_rgba(255,255,255,0.25)] flex items-center justify-center relative overflow-hidden"
-        >
-          <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_#ffffff]" />
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent opacity-60" />
-        </motion.div>
-      )}
-
-      {/* ── Mode 4: High-Yield Diamond ── */}
-      {cursorMode === 'emerald-spark' && (
-        <>
-          <motion.div
-            style={{
-              x: trailX,
-              y: trailY,
-              translateX: '-50%',
-              translateY: '-50%',
-            }}
-            animate={{
-              scale: isClicked ? 0.75 : isHovered ? 1.5 : 1,
-              rotate: isHovered ? 135 : 45,
-            }}
-            transition={{ type: 'spring', damping: 20 }}
-            className="w-8 h-8 border border-emerald-400/80 bg-emerald-500/10 shadow-[0_0_24px_rgba(52,211,153,0.5)] flex items-center justify-center relative"
-          />
-
-          <motion.div
-            style={{
-              x: mouseX,
-              y: mouseY,
-              translateX: '-50%',
-              translateY: '-50%',
-            }}
-            className="w-2 h-2 rounded-full bg-emerald-300 shadow-[0_0_10px_#34d399]"
-          />
-        </>
-      )}
-
-      {/* ── Mode 5: Minimal Invert Ring ── */}
-      {cursorMode === 'sleek-ring' && (
-        <>
-          <motion.div
-            style={{
-              x: trailX,
-              y: trailY,
-              translateX: '-50%',
-              translateY: '-50%',
-            }}
-            animate={{
-              scale: isClicked ? 0.6 : isHovered ? 1.5 : 1,
-            }}
-            className="w-8 h-8 rounded-full border border-white/80 bg-white/5 backdrop-invert-[0.25]"
-          />
-
-          <motion.div
-            style={{
-              x: mouseX,
-              y: mouseY,
-              translateX: '-50%',
-              translateY: '-50%',
-            }}
-            className="w-1.5 h-1.5 rounded-full bg-white"
-          />
-        </>
-      )}
+          className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_#ffffff]"
+        />
+      </motion.div>
     </div>
   );
 }
