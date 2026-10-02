@@ -14,7 +14,7 @@ import {
   FiActivity,
 } from 'react-icons/fi';
 import { Logo, CursorPicker } from '@/components/ui';
-import { useCursor, CursorMode } from '@/context/CursorContext';
+import { useCursor } from '@/context/CursorContext';
 import { useAuth } from '@/context/AuthContext';
 
 function GlobeGraphic() {
@@ -113,14 +113,8 @@ const FEATURES = [
   { icon: FiPieChart, title: 'Smart Budgeting', description: 'Automatic category breakdown with overspend alerts.' },
 ];
 
-const CURSOR_OPTIONS_INFO = [
-  { id: 'neon-pulse', name: 'Neon Pulse', tagline: 'Glowing cyan aura ring that expands on hover', color: '#4cd7f6' },
-  { id: 'cyber-crosshair', name: 'Cyber Reticle', tagline: 'Futuristic HUD-style target lock brackets', color: '#c4c0ff' },
-  { id: 'magnetic-sphere', name: 'Glass Orbit', tagline: 'Frosted glassmorphic magnetic orb with physics', color: '#38bdf8' },
-  { id: 'emerald-spark', name: 'Wealth Spark', tagline: 'Electric emerald particle for finance tracking', color: '#34d399' },
-  { id: 'sleek-ring', name: 'Minimal Ring', tagline: 'Ultra-clean micro ring with backdrop invert', color: '#ffffff' },
-  { id: 'default', name: 'Default', tagline: 'System OS cursor — classic and reliable', color: '#444' },
-];
+// Uses cursorOptions directly from useCursor() hook
+
 
 const FAQ_ITEMS = [
   { q: 'Is my financial data safe?', a: 'Yes. Vyntra is local-first. All data is AES-256 encrypted on your device. Nothing is sent to third parties or central servers.' },
@@ -132,7 +126,7 @@ const FAQ_ITEMS = [
 export function LandingPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const { cursorMode, setCursorMode } = useCursor();
+  const { cursorMode, setCursorMode, cursorOptions } = useCursor();
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [scrolled, setScrolled] = useState(false);
 
@@ -298,15 +292,15 @@ export function LandingPage() {
           <p className="text-[13px] text-[#444]">Pick your cursor style. Changes apply live across the entire app.</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-          {CURSOR_OPTIONS_INFO.map((opt) => {
+          {cursorOptions.map((opt) => {
             const isActive = cursorMode === opt.id;
             return (
-              <button key={opt.id} onClick={() => setCursorMode(opt.id as CursorMode)}
+              <button key={opt.id} onClick={() => setCursorMode(opt.id)}
                 className={`p-5 rounded-2xl text-left border transition-all relative group ${isActive ? 'bg-[#0f0f0f] border-[#252525]' : 'bg-[#0d0d0d] border-[#161616] hover:border-[#212121]'}`}>
                 {isActive && <div className="absolute top-0 left-8 right-8 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,212,170,0.5), transparent)' }} />}
                 <div className="flex items-center justify-between mb-2.5">
                   <div className="flex items-center gap-2.5">
-                    <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: opt.color, boxShadow: isActive ? `0 0 7px ${opt.color}66` : 'none' }} />
+                    <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: opt.accentColor, boxShadow: isActive ? `0 0 7px ${opt.accentColor}66` : 'none' }} />
                     <span className="text-[13px] font-semibold text-white">{opt.name}</span>
                   </div>
                   {isActive && <FiCheck size={11} className="text-[#00d4aa]" />}
