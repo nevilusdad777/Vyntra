@@ -86,9 +86,16 @@
     background-attachment: fixed;
   }
 
-  /* Custom Cursor active state — hides default cursor */
+  /* Custom Cursor active state — strictly hides default browser cursor everywhere */
   body.custom-cursor-active,
-  body.custom-cursor-active * {
+  body.custom-cursor-active *,
+  body.custom-cursor-active button,
+  body.custom-cursor-active a,
+  body.custom-cursor-active input,
+  body.custom-cursor-active select,
+  body.custom-cursor-active textarea,
+  body.custom-cursor-active [role="button"],
+  body.custom-cursor-active [tabindex] {
     cursor: none !important;
   }
 

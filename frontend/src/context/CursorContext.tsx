@@ -196,29 +196,40 @@ function CustomCursorRenderer({
               translateY: '-50%',
             }}
             animate={{
-              scale: isClicked ? 0.7 : isHovered ? 1.75 : 1,
+              scale: isClicked ? 0.65 : isHovered ? 1.8 : 1,
               opacity: isHovered ? 1 : 0.75,
-              borderColor: isHovered ? 'rgba(0, 212, 170, 0.9)' : 'rgba(0, 212, 170, 0.45)',
+              borderColor: isHovered ? 'rgba(0, 212, 170, 0.95)' : 'rgba(0, 212, 170, 0.5)',
             }}
             transition={{ type: 'spring', damping: 22, stiffness: 380 }}
-            className="w-10 h-10 rounded-full border border-[#00d4aa]/60 bg-[#00d4aa]/10 backdrop-blur-[2px] shadow-[0_0_28px_rgba(0,212,170,0.5)] flex items-center justify-center relative"
+            className="w-10 h-10 rounded-full border border-[#00d4aa]/70 bg-[#00d4aa]/15 backdrop-blur-[2px] shadow-[0_0_30px_rgba(0,212,170,0.6)] flex items-center justify-center relative"
           >
-            <div className="w-2.5 h-2.5 rounded-full bg-[#00d4aa] opacity-40 animate-ping" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#00d4aa] opacity-50 animate-ping" />
           </motion.div>
 
-          {/* Core Sharp Pointer Dot */}
+          {/* Sharp Neon Arrow Pointer Tip */}
           <motion.div
             style={{
               x: mouseX,
               y: mouseY,
-              translateX: '-50%',
-              translateY: '-50%',
             }}
             animate={{
-              scale: isClicked ? 1.5 : isHovered ? 0.7 : 1,
+              scale: isClicked ? 0.85 : isHovered ? 1.25 : 1,
+              rotate: isHovered ? -15 : 0,
             }}
-            className="w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_12px_#ffffff]"
-          />
+            transition={{ type: 'spring', damping: 20, stiffness: 450 }}
+            className="w-6 h-6 -mt-1 -ml-1 flex items-center justify-center filter drop-shadow-[0_0_8px_#00d4aa]"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M3 3L10.07 19.97L13.58 12.58L20.97 9.07L3 3Z"
+                fill="#00d4aa"
+                stroke="#ffffff"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </motion.div>
         </>
       )}
 

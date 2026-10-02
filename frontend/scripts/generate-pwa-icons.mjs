@@ -6,9 +6,9 @@ import sharp from 'sharp';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.resolve(__dirname, '../public');
 const iconsDir = path.join(publicDir, 'icons');
-const pngPath = path.resolve(__dirname, '../src/assets/vyntra_logo_cropped.png');
+const svgPath = path.resolve(__dirname, '../public/favicon.svg');
 
-const sourceImage = readFileSync(pngPath);
+const sourceImage = readFileSync(svgPath);
 
 async function writePng(filename, size, padding = 0) {
   const out = path.join(iconsDir, filename);
